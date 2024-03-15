@@ -1,54 +1,50 @@
 <template>
-  <div class="home">
-  <div class="min-h-full">
-
-    <LayoutPage/>
-    <main class="pt-4">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-
-
-
-    <WeatherDetails />
-    <WeatherForecast />
-    <NotificationSettings />
-    <LocationList />
-    <LocationHistory />
-    <SignIn />
-    <SignUp />
+  <div class="container mx-auto p-4 bg-gray-300">
+    <LayoutPage />
+    <div class="flex flex-col md:flex-row ">
+      <div class="md:w-1/3 mr-4">
+        <WeatherSearching @weather-updated="updateWeatherData"  @search-location="updateLocation"  />
+      </div>
+      <div class="md:w-2/3">
+        <WeatherDetails :weatherData="weatherData"/>
+        <WeatherForecast :location="location" :apiKey="apiKey" />
+      </div>
     </div>
-    </main>
-  </div>
   </div>
 </template>
 
 <script>
-import WeatherDetails from '@/components/WeatherDetails.vue';
-import WeatherForecast from '@/components/WeatherForecast.vue';
-import NotificationSettings from '@/components/NotificationSettings.vue';
-import LocationList from '@/components/LocationList.vue';
-import LocationHistory from '@/components/LocationHistory.vue';
-import SignIn from '@/components/SignIn.vue';
-import SignUp from '@/components/SignUp.vue';
-import LayoutPage from '@/components/LayoutPage.vue';
-
+import LayoutPage from '../components/LayoutPage.vue'
+import WeatherSearching from '../components/WeatherSearching.vue'
+import WeatherDetails from '../components/WeatherDetails.vue'
+import WeatherForecast from '../components/WeatherForecast.vue';
 
 export default {
-  name: 'HomePage',
+  name: 'HomeView',
   components: {
+    LayoutPage,
+    WeatherSearching,
     WeatherDetails,
     WeatherForecast,
-    NotificationSettings,
-    LocationList,
-    LocationHistory,
-    SignIn,
-    SignUp,
-    LayoutPage
-
   },
-  // Add any additional logic or data properties here
-};
+  data() {
+    return {
+      weatherData: null,
+      location: '',
+      apiKey: '3fb88be94d55466ac863dba74951b1fc'
+    }
+  },
+  methods: {
+    updateWeatherData(data) {
+      this.weatherData = data;
+    },
+    updateLocation(location) {
+      this.location = location;
+    }
+  } 
+}
 </script>
 
-<style scoped>
-/* Add styles for the home page */
+<style lang="">
 </style>
+

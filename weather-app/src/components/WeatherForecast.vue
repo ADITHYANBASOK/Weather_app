@@ -1,102 +1,115 @@
 <template>
- <div class="col-span-4 bg-gray-200 p-4">
-
-  <div class="weather-data">
-
-
-    <div class="days-forecast">
-      <h2>5-Day Forecast</h2>
-      <ul class="weather-cards" >
-          <div v-for="(forecast, index) in forecastData.list" :key="index">
-          <div v-if="index > 1 && (index - 1) % 8 === 0">
-
-        <li class="card" >
-          <h3>{{forecast.dt_txt}} </h3>
-          <h6>Temp: {{ forecast.main.temp }} °C</h6>
-          <h6>Wind: daywind M/S</h6>
-          <h6>Humidity:dayhumidity%</h6>
-        </li>
-        </div>
-        </div>
-      </ul>
+  <div class="container mx-auto p-8">
+    <h2 class="text-2xl font-semibold mb-4">{{ location }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div v-for="day in forecastData" :key="day.date" class="card bg-card">
+        <h3 class="text-xl font-semibold">{{ day.date }}</h3>
+     
+          <div class="mr-4">
+            <span class="text-gray-600">Temperature:</span>
+            <span class="ml-2">{{ day.temperature }}°C</span>
+          </div>
+          <div>
+            <span class="text-gray-600">Weather:</span>
+            <span class="ml-2">{{ day.weatherDescription }}</span>
+          </div>
+       <div>
+            <span class="text-gray-600">humidity:</span>
+            <span class="ml-2">{{ day.humidity}}</span>
+          </div>
+      </div>
     </div>
   </div>
-  </div>
 </template>
+
 
 <script>
 import axios from 'axios';
 
 export default {
+  name: 'weatherForecast',
+  props: {
+    location: String,
+    apiKey: String
+  },
   data() {
     return {
-      forecastData: {}
+      forecastData: [],
+      showForecast: false
     };
   },
-  mounted() {
-    const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=c152a89bf45a2585cab63bc112c3e28e`;
-    axios.get(apiUrl)
-      .then(response => {
-        this.forecastData = response.data; // Assign weather data to the data property
-        console.log(this.forecastData)
-
-      })
-      .catch(error => {
-        console.error('Error fetching weather data:', error);
-      });
-
-  },
   methods: {
-    // Function to convert temperature to Celsius
-    convertToCelsius(kelvin) {
-      return Math.round(kelvin - 273.15);
+    async fetchForecastData(location) {
+      try {
+        const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?q=${location}&appid=${this.apiKey}`);
+        const locationName = response.data.city.name;
+        console.log('Location Name:',locationName); 
+        this.forecastData = response.data.list
+        
+          .filter((item, index) => index % 8 === 0) // Filter data to get every 8th item (1 item per day)
+          .map(item => ({
+            date: item.dt_txt,
+            temperature: item.main.temp,
+            weatherDescription: item.weather[0].description,
+            humidity: item.main.humidity
+          }));
+        this.showForecast = true;
+      } catch (error) {
+        console.error('Error fetching forecast data:', error);
+      }
+    },
+    async fetchCurrentLocationForecastData() {
+      try {
+        navigator.geolocation.getCurrentPosition(async position => {
+          const { latitude, longitude } = position.coords;
+          const response = await axios.get(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${this.apiKey}`);
+          this.forecastData = response.data.list
+          const locationName = response.data.city.name
+          console.log('kkk',response.data.city.name)
+          console.log('kkk',locationName)
+
+            .filter((item, index) => index % 8 === 0)
+            .map(item => ({
+              date: item.dt_txt,
+              temperature: item.main.temp,
+              weatherDescription: item.weather[0].description,
+              humidity: item.main.humidity
+            }));
+          this.showForecast = true;
+        });
+      } catch (error) {
+        console.error('Error fetching forecast data:', error);
+      }
+    }
+  },
+  mounted() {
+    if (this.location && this.apiKey) {
+      this.fetchForecastData(this.location);
+    }
+  },
+  watch: {
+    location(newLocation) {
+      this.forecastData = [];
+      if (newLocation) {
+        this.fetchForecastData(newLocation);
+      }
     }
   }
-};
+}
 </script>
 
 <style scoped>
-.weather-data {
-  width: 100%;
+.card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: #e2e8f0;
 }
 
-.weather-data .days-forecast {
-  margin-top: 20px;
+.card h3 {
+  margin-bottom: 0.5rem;
 }
-
-.weather-data .days-forecast h2 {
-  font-size: 1.5rem;
-}
-
-.weather-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-}
-
-.weather-cards .card {
-  color: #fff;
-  padding: 18px 16px;
-  list-style: none;
-  flex: 1 1 calc(20% - 20px); /* Adjusted width for responsiveness */
-  background: #6c757d;
-  border-radius: 5px;
-}
-
-.weather-cards .card h3 {
-  font-size: 1.3rem;
-  font-weight: 600;
-}
-
-@media (max-width: 1200px) {
-  .weather-cards .card {
-    flex-basis: calc(33.33% - 20px); /* Adjusted width for responsiveness */
-  }
-}
-
-@media (max-width: 750px) {
-  .weather-cards .card {
-    flex-basis: calc(50% - 20px); /* Adjusted width for responsiveness */
-  }
+.bg-card{
+  background-color: #FFFFCC
 }
 </style>
