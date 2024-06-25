@@ -13,7 +13,7 @@ const app = express();
 app.use(cors({
   origin: 'https://weather-app-x23b.vercel.app', // Replace with your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true, // If you need to send cookies with requests
 }));
 // app.use(cors());
