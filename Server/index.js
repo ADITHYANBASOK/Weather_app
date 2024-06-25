@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 // Connect to MongoDB database
-mongoose.connect("mongodb+srv://adithyanbasok:4GkiLDjRJGZKbz5k@cluster0.0qnjrx3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverSelectionTimeoutMS: 5000,
