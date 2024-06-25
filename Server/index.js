@@ -16,6 +16,12 @@ app.use(cors({
   credentials: true, // If you need to send cookies with requests
 }));
 // app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // or specify a specific origin
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // Connect to MongoDB database
 mongoose.connect(process.env.MONGODB_URI, {
