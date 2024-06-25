@@ -62,7 +62,7 @@ export default {
         password: this.password
       };
 
-      const response = await axios.post('http://localhost:8081/auth/login', formData);
+      const response = await axios.post('https://weather-app-six-henna-77.vercel.app/auth/login', formData);
 
       if (response.data && response.data.token) {
         // Optionally, you can store the token in local storage or Vuex state for future use

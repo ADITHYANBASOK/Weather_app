@@ -33,7 +33,7 @@ export default {
 
 <style scoped>
 .bg-custom-image {
-  background-image: url('C:\Users\DELL\Desktop\test\weather\weather-app\src\assets\images\SL-031821-41530-15.jpg'); 
+  background-image: url('@/assets/images/SL-031821-41530-15.jpg'); 
   background-size: cover;
   background-position: center;
 }

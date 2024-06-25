@@ -75,7 +75,7 @@ export default {
 
         console.log("form", formData);
 
-        const response = await axios.post('http://localhost:8081/auth/signup', formData);
+        const response = await axios.post('https://weather-app-six-henna-77.vercel.app/auth/signup', formData);
 
         if (!response.data) {
           throw new Error('Failed to sign up');
