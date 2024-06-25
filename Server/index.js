@@ -28,6 +28,7 @@ app.use((req, res, next) => {
 mongoose.connect("mongodb+srv://adithyanbasok:4GkiLDjRJGZKbz5k@cluster0.0qnjrx3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 5000,
 });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
