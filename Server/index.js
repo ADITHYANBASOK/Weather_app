@@ -11,7 +11,7 @@ require('dotenv').config();
 const app = express();
 
 app.use(cors({
-  origin: 'https://your-frontend-domain.vercel.app', // Replace with your frontend URL
+  origin: 'https://weather-app-x23b.vercel.app', // Replace with your frontend URL
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true, // If you need to send cookies with requests
 }));
