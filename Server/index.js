@@ -10,12 +10,14 @@ require('dotenv').config();
 
 const app = express();
 
+
 app.use(cors({
-  origin: 'https://weather-app-x23b.vercel.app', // Replace with your frontend URL
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true, // If you need to send cookies with requests
+  origin: 'https://weather-app-x23b.vercel.app',  // Allow only your frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Specify the methods allowed
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow these headers
+  credentials: true  // Allow cookies or auth headers if needed
 }));
+
 
 
 // Connect to MongoDB database
