@@ -18,6 +18,9 @@ app.use(cors({
   credentials: true  // Allow cookies or auth headers if needed
 }));
 
+app.options('*', cors());
+
+
 
 
 // Connect to MongoDB database
